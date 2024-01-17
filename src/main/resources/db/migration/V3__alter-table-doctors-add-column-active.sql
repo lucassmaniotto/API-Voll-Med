@@ -1,1 +1,0 @@
-alter table doctors add column active tinyint(1) default 1;
