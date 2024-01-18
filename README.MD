@@ -16,6 +16,25 @@ API Rest para gestão de consultas médicas da clínica fictícia Voll.med const
 
 Voll.med é uma clínica médica fictícia que precisa de um aplicativo para gestão de consultas. O aplicativo possui funcionalidades que permitam o cadastro de médicos e de pacientes, e também o agendamento e cancelamento de consultas. O projeto foi desenvolvido utilizando a linguagem Java com o framework Spring Boot e banco de dados MySQL.
 
+### ⚙️ Configurando o projeto
+
+Para executar o projeto, será necessário instalar os seguintes programas:
+
+- [JDK 21: Necessário para executar o projeto Java](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [Maven 3.8.1: Necessário para realizar o build do projeto Java](https://maven.apache.org/download.cgi)
+- [MySQL 8.0: Para banco de dados](https://dev.mysql.com/downloads/installer/)
+- [Insomnia: Para testar a API Rest](https://insomnia.rest/download)
+
+### ▶️ Executando o projeto
+
+Para inicializar a API, basta rodar a classe ApiApplication.java localizada no pacote med.voll.api ou com o comando abaixo:
+
+```shell script
+mvn spring-boot:run
+```
+
+Após executar o comando acima, a API estará disponível em: http://localhost:8081
+
 ### 💡 Funcionalidades
 
 - [x] CRUD de médicos;
