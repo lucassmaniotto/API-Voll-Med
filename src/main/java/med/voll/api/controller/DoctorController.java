@@ -20,12 +20,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.NonNull;
-import med.voll.api.doctor.DataDoctorDetails;
-import med.voll.api.doctor.Doctor;
-import med.voll.api.doctor.DoctorRepository;
-import med.voll.api.doctor.ListDataDoctors;
-import med.voll.api.doctor.RegisterDataDoctors;
-import med.voll.api.doctor.UpdateDataDoctors;
+import med.voll.api.domain.doctor.DataDoctorDetails;
+import med.voll.api.domain.doctor.Doctor;
+import med.voll.api.domain.doctor.DoctorRepository;
+import med.voll.api.domain.doctor.ListDataDoctors;
+import med.voll.api.domain.doctor.RegisterDataDoctors;
+import med.voll.api.domain.doctor.UpdateDataDoctors;
 
 @RestController
 @RequestMapping("/doctors")

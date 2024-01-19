@@ -2,7 +2,7 @@ package med.voll.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.NonNull;
-import med.voll.api.patient.*;
+import med.voll.api.domain.patient.*;
 
 import java.util.Objects;
 
