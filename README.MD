@@ -39,7 +39,7 @@ Após executar o comando acima, a API estará disponível em: http://localhost:8
 
 - [x] CRUD de médicos;
 - [x] CRUD de pacientes;
-- [ ] Agendamento de consultas;
+- [x] Agendamento de consultas;
 - [ ] Cancelamento de consultas;
 
 ### 🛠 Tecnologias
