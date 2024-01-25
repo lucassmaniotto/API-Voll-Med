@@ -1,4 +1,4 @@
-package med.voll.api.domain.appointment.validation;
+package med.voll.api.domain.appointment.validation.scheduling;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import java.time.Duration;
 import med.voll.api.domain.ValidationException;
 import med.voll.api.domain.appointment.AppointmentSchedulingData;
 
-@Component
+@Component("ValidateAppointmentSchedulingAdvanceTime")
 public class AdvanceTimeValidator implements AppointmentScheduleValidator {
     public void validate (AppointmentSchedulingData data) {
         var appointmentDate = data.date();

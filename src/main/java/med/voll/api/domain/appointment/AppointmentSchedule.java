@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import med.voll.api.domain.ValidationException;
-import med.voll.api.domain.appointment.validation.AppointmentScheduleValidator;
+import med.voll.api.domain.appointment.validation.cancellation.AppointmentCancellationValidator;
+import med.voll.api.domain.appointment.validation.scheduling.AppointmentScheduleValidator;
 import med.voll.api.domain.doctor.Doctor;
 import med.voll.api.domain.doctor.DoctorRepository;
 import med.voll.api.domain.patient.PatientRepository;
@@ -12,7 +13,6 @@ import med.voll.api.domain.patient.PatientRepository;
 import java.util.List;
 
 @Service
-@SuppressWarnings("null")
 public class AppointmentSchedule {
     
     @Autowired
@@ -25,7 +25,10 @@ public class AppointmentSchedule {
     private PatientRepository patientRepository;
 
     @Autowired
-    private List<AppointmentScheduleValidator> validators;
+    private List<AppointmentScheduleValidator> scheduleValidators;
+
+    @Autowired
+    private List<AppointmentCancellationValidator> cancelValidators;
 
     public SchedulingDetailsData schedule(AppointmentSchedulingData data) {
         if (!patientRepository.existsById(data.idPatient()))
@@ -34,7 +37,7 @@ public class AppointmentSchedule {
         if (data.idDoctor() != null && !doctorRepository.existsById(data.idDoctor()))
             throw new ValidationException(String.format("Médico não encontrado"));
 
-        validators.forEach(validator -> validator.validate(data));
+        scheduleValidators.forEach(validator -> validator.validate(data));
 
         var patient = patientRepository.getReferenceById(data.idPatient());
         var doctor = chooseDoctor(data);
@@ -42,10 +45,20 @@ public class AppointmentSchedule {
         if (doctor == null)
             throw new ValidationException("Não há médicos disponíveis para a data e especialidade informadas");
             
-        var appointment = new Appointment(null, doctor, patient, data.date());
+        var appointment = new Appointment(null, doctor, patient, data.date(), null);
         appointmentRepository.save(appointment);
 
         return new SchedulingDetailsData(appointment);
+    }
+
+    public void cancel(AppointmentCancellationData data) {
+        if (!appointmentRepository.existsById(data.idAppointment()))
+            throw new ValidationException(String.format("Consulta não encontrada"));
+
+        cancelValidators.forEach(validator -> validator.validate(data));
+
+        var appointment = appointmentRepository.getReferenceById(data.idAppointment());
+        appointment.cancel(data.reason());
     }
 
     private Doctor chooseDoctor(AppointmentSchedulingData data) {

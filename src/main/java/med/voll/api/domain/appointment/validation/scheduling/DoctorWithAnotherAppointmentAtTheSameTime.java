@@ -1,4 +1,4 @@
-package med.voll.api.domain.appointment.validation;
+package med.voll.api.domain.appointment.validation.scheduling;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ public class DoctorWithAnotherAppointmentAtTheSameTime implements AppointmentSch
     private AppointmentRepository repository;
 
     public void validate(AppointmentSchedulingData data) {
-        var doctorHasAnotherAppointmentAtTheSameTime = repository.existsByDoctorIdAndDate(data.idDoctor(), data.date());
+        var doctorHasAnotherAppointmentAtTheSameTime = repository.existsByDoctorIdAndDateAndCancelReasonIsNull(data.idDoctor(), data.date());
         if (doctorHasAnotherAppointmentAtTheSameTime)
             throw new ValidationException("Médico já possui consulta agendada para o mesmo horário");
     }
