@@ -3,6 +3,7 @@ package med.voll.api.domain.appointment.validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import med.voll.api.domain.ValidationException;
 import med.voll.api.domain.appointment.AppointmentRepository;
 import med.voll.api.domain.appointment.AppointmentSchedulingData;
 
@@ -17,6 +18,6 @@ public class PatientWithoutAnotherAppointmentOnTheDay implements AppointmentSche
         var patientHasAnotherAppointmentOnTheDay = repository.existsByPatientIdAndDateBetween(data.idPatient(), firstTime, lastTime);
 
         if (patientHasAnotherAppointmentOnTheDay)
-            throw new RuntimeException("Paciente já possui consulta agendada para o mesmo dia");
+            throw new ValidationException("Paciente já possui consulta agendada para o mesmo dia");
     }
 }

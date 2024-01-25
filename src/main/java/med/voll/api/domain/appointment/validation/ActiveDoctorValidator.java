@@ -3,6 +3,7 @@ package med.voll.api.domain.appointment.validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import med.voll.api.domain.ValidationException;
 import med.voll.api.domain.appointment.AppointmentSchedulingData;
 import med.voll.api.domain.doctor.DoctorRepository;
 
@@ -17,7 +18,7 @@ public class ActiveDoctorValidator implements AppointmentScheduleValidator {
         
             var doctorIsActive = repository.findActiveById(data.idDoctor());
             if (!doctorIsActive)
-                throw new RuntimeException("Consulta não pode ser agendada com médico inativo");
+                throw new ValidationException("Consulta não pode ser agendada com médico inativo");
     
     }
 }

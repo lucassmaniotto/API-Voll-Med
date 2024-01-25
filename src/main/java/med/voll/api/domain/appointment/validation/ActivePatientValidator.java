@@ -3,6 +3,7 @@ package med.voll.api.domain.appointment.validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import med.voll.api.domain.ValidationException;
 import med.voll.api.domain.appointment.AppointmentSchedulingData;
 import med.voll.api.domain.patient.PatientRepository;
 
@@ -17,7 +18,7 @@ public class ActivePatientValidator implements AppointmentScheduleValidator {
         
             var patientIsActive = repository.findActiveById(data.idPatient());
             if (!patientIsActive)
-                throw new RuntimeException("Consulta não pode ser agendada com paciente excluído");
+                throw new ValidationException("Consulta não pode ser agendada com paciente excluído");
     
     }
 }

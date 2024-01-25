@@ -27,7 +27,7 @@ public class AppointmentSchedule {
     @Autowired
     private List<AppointmentScheduleValidator> validators;
 
-    public void schedule(AppointmentSchedulingData data) {
+    public SchedulingDetailsData schedule(AppointmentSchedulingData data) {
         if (!patientRepository.existsById(data.idPatient()))
             throw new ValidationException(String.format("Paciente não encontrado"));
 
@@ -38,22 +38,25 @@ public class AppointmentSchedule {
 
         var patient = patientRepository.getReferenceById(data.idPatient());
         var doctor = chooseDoctor(data);
+
+        if (doctor == null)
+            throw new ValidationException("Não há médicos disponíveis para a data e especialidade informadas");
+            
         var appointment = new Appointment(null, doctor, patient, data.date());
         appointmentRepository.save(appointment);
+
+        return new SchedulingDetailsData(appointment);
     }
 
     private Doctor chooseDoctor(AppointmentSchedulingData data) {
         if (data.idDoctor() != null)
             return doctorRepository.getReferenceById(data.idDoctor());
 
-        if (data.specialty() != null)
+        if (data.specialty() == null)
             throw new ValidationException("Especialidade é obrigatória para agendamento sem médico");
 
-        try {
-            var randomDoctor = doctorRepository.chooseAvailableRandomDoctorAtDate(data.specialty(), data.date());
-            return randomDoctor;
-        } catch (Exception e) {
-            throw new ValidationException("Não foi possível encontrar um médico disponível para a data e especialidade informada");
-        }
+        var randomDoctor = doctorRepository.chooseAvailableRandomDoctorAtDate(data.specialty(), data.date());
+        return randomDoctor;
+        
     }
 }
