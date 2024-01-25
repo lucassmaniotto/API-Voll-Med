@@ -7,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
@@ -16,16 +14,20 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     Page<Doctor> findAllByActiveTrue(@NonNull Pageable pageable);
 
     @Query("""
-            SELECT d FROM doctors d
-            WHERE d.active = 1
-            AND d.specialty = :
-            AND NOT IN (
-                SELECT a.id_doctor FROM appointments a
-                WHERE a.date = :date
+            select d from Doctor d
+            where 
+            d.active = true
+            and 
+            d.specialty = :specialty
+            and 
+            d.id not in (
+                select a.doctor.id from Appointment a
+                where 
+                a.date = :date
             )
-            ORDER BY RAND()
-            LIMIT 1
-            """)
-    Doctor chooseRandomDoctorAvailable(Specialty specialty, @NotNull @Future LocalDateTime date);
+            order by rand()
+            limit 1
+        """)
+    Doctor chooseAvailableRandomDoctorAtDate(Specialty specialty, LocalDateTime date);
 
 }

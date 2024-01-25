@@ -22,29 +22,30 @@ public class AppointmentSchedule {
     private PatientRepository patientRepository;
 
     public void schedule(AppointmentSchedulingData data) {
-        if(!patientRepository.existsById(data.idPatient())) {
-            throw new ValidationException("Paciente não encontrado");
-        }
-        if(data.idDoctor() != null && !doctorRepository.existsById(data.idDoctor())) {
-            throw new ValidationException("Médico não encontrado");
-        }
-        
+        if (!patientRepository.existsById(data.idPatient()))
+            throw new ValidationException(String.format("Paciente não encontrado"));
+
+        if (data.idDoctor() != null && !doctorRepository.existsById(data.idDoctor()))
+            throw new ValidationException(String.format("Médico não encontrado"));
+
         var patient = patientRepository.getReferenceById(data.idPatient());
         var doctor = chooseDoctor(data);
         var appointment = new Appointment(null, doctor, patient, data.date());
         appointmentRepository.save(appointment);
     }
 
-    
     private Doctor chooseDoctor(AppointmentSchedulingData data) {
-        if(data.idDoctor() != null) {
+        if (data.idDoctor() != null)
             return doctorRepository.getReferenceById(data.idDoctor());
-        }
 
-        if(data.specialty() == null) {
-            throw new ValidationException("Especialidade é obrigatória quando médico não é escolhido");
-        }
+        if (data.specialty() != null)
+            throw new ValidationException("Especialidade é obrigatória para agendamento sem médico");
 
-        return doctorRepository.chooseRandomDoctorAvailable(data.specialty(), data.date());
+        try {
+            var randomDoctor = doctorRepository.chooseAvailableRandomDoctorAtDate(data.specialty(), data.date());
+            return randomDoctor;
+        } catch (Exception e) {
+            throw new ValidationException("Não foi possível encontrar um médico disponível para a data e especialidade informada");
+        }
     }
 }

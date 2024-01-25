@@ -17,14 +17,15 @@ import lombok.NoArgsConstructor;
 import med.voll.api.domain.doctor.Doctor;
 import med.voll.api.domain.patient.Patient;
 
-@Table(name = "appointments")
 @Entity(name = "Appointment")
+@Table(name = "appointments")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Appointment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
