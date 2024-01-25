@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import med.voll.api.domain.ValidationException;
+import med.voll.api.domain.appointment.validation.AppointmentScheduleValidator;
 import med.voll.api.domain.doctor.Doctor;
 import med.voll.api.domain.doctor.DoctorRepository;
 import med.voll.api.domain.patient.PatientRepository;
+
+import java.util.List;
 
 @Service
 @SuppressWarnings("null")
@@ -21,12 +24,17 @@ public class AppointmentSchedule {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    private List<AppointmentScheduleValidator> validators;
+
     public void schedule(AppointmentSchedulingData data) {
         if (!patientRepository.existsById(data.idPatient()))
             throw new ValidationException(String.format("Paciente não encontrado"));
 
         if (data.idDoctor() != null && !doctorRepository.existsById(data.idDoctor()))
             throw new ValidationException(String.format("Médico não encontrado"));
+
+        validators.forEach(validator -> validator.validate(data));
 
         var patient = patientRepository.getReferenceById(data.idPatient());
         var doctor = chooseDoctor(data);
