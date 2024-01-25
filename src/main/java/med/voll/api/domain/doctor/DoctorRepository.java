@@ -14,27 +14,27 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     Page<Doctor> findAllByActiveTrue(@NonNull Pageable pageable);
 
     @Query("""
-            select d from Doctor d
-            where 
-            d.active = true
-            and 
-            d.specialty = :specialty
-            and 
-            d.id not in (
-                select a.doctor.id from Appointment a
+                select d from Doctor d
                 where 
-                a.date = :date
-            )
-            order by rand()
-            limit 1
+                d.active = true
+                and 
+                d.specialty = :specialty
+                and 
+                d.id not in (
+                    select a.doctor.id from Appointment a
+                    where 
+                    a.date = :date
+                )
+                order by rand()
+                limit 1
         """)
     Doctor chooseAvailableRandomDoctorAtDate(Specialty specialty, LocalDateTime date);
 
     @Query("""
-            select d.active
-            from Doctor d
-            where 
-            d.id = :id
+                select d.active
+                from Doctor d
+                where 
+                d.id = :id
             """)
     Boolean findActiveById(Long id);
 
