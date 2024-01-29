@@ -27,6 +27,7 @@ public class SecurityConfigurations {
             .authorizeHttpRequests(req -> {
                 req.requestMatchers("/login").permitAll();
                 req.requestMatchers("/index").permitAll();
+                req.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                 req.anyRequest().authenticated();
             })
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
