@@ -23,7 +23,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UserRepository repository;
 
     @Override
-    @SuppressWarnings("null")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = getToken(request);
 
